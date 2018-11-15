@@ -5,7 +5,7 @@ try:
 except ImportError, e:
     from django.db.models import get_model
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -98,7 +98,8 @@ class ModelDatabrowse(object):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page.
             obj_list_page = paginator.page(paginator.num_pages)
-        return render_to_response(
+        return render(
+            request,
             'databrowse/model_detail.html',
             {
                 'model': easy_model,
@@ -106,7 +107,7 @@ class ModelDatabrowse(object):
                 'plugin_html': html_snippets,
                 'object_list': obj_list_page,
                 'items_per_page': items_per_page,
-            }, {}
+            }
         )
 
 
@@ -164,10 +165,10 @@ class DatabrowseSite(object):
 
     def index(self, request):
         m_list = [EasyModel(self, m) for m in self.registry.keys()]
-        return render_to_response(
+        return render(
+            request,
             'databrowse/homepage.html',
-            {'model_list': m_list, 'root_url': self.root_url},
-            {}
+            {'model_list': m_list, 'root_url': self.root_url}
         )
 
     def model_page(self, request, app_label, model_name, rest_of_url=None):
