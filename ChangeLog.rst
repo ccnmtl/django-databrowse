@@ -1,3 +1,10 @@
+2018.11.19 2018.11.19
+====================
+----
+
+* Switch render_to_resonse to render to ensure full context is available.
+
+
 2017.12.18 2017.12.18
 ====================
 ----
@@ -5,6 +12,7 @@
 * Django 1.10 fixes -- Substitute deprecated model functionality
 
 2017.12.15 2017.12.15
+
 ====================
 ----
 
