@@ -2,7 +2,7 @@ from django import http
 from django.db import models
 from django_databrowse.datastructures import EasyModel
 from django_databrowse.sites import DatabrowsePlugin
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.utils.text import capfirst
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.safestring import mark_safe
@@ -83,13 +83,14 @@ class FieldChoicePlugin(DatabrowsePlugin):
         easy_model = EasyModel(self.site, self.model)
         field_list = self.fields.values()
         field_list.sort(key=lambda k: k.verbose_name)
-        return render_to_response(
+        return render(
+            request,
             'databrowse/fieldchoice_homepage.html',
             {
                 'root_url': self.site.root_url,
                 'model': easy_model,
                 'field_list': field_list
-            }, {}
+            }
         )
 
     def field_view(self, request, field, value=None):
@@ -122,7 +123,8 @@ class FieldChoicePlugin(DatabrowsePlugin):
             obj_list_page = paginator.page(paginator.num_pages)
         
         if value is not None:
-            return render_to_response(
+            return render(
+                request,
                 'databrowse/fieldchoice_detail.html',
                 {
                     'root_url': self.site.root_url,
@@ -131,10 +133,11 @@ class FieldChoicePlugin(DatabrowsePlugin):
                     'value': value,
                     'object_list': obj_list_page,
                     'items_per_page': items_per_page,
-                }, {}
+                }
             )
 
-        return render_to_response(
+        return render(
+            request,
             'databrowse/fieldchoice_list.html',
             {
                 'root_url': self.site.root_url,
@@ -142,5 +145,5 @@ class FieldChoicePlugin(DatabrowsePlugin):
                 'field': easy_field,
                 'object_list': obj_list_page,
                 'items_per_page': items_per_page,
-            }, {}
+            }
         )

@@ -2,7 +2,7 @@ from django import http
 from django.db import models
 from django_databrowse.datastructures import EasyModel
 from django_databrowse.sites import DatabrowsePlugin
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.utils.text import capfirst
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
@@ -108,13 +108,14 @@ class CalendarPlugin(DatabrowsePlugin):
         easy_model = EasyModel(self.site, self.model)
         field_list = self.fields.values()
         field_list.sort(key=lambda k:k.verbose_name)
-        return render_to_response(
+        return render(
+            request,
             'databrowse/calendar_homepage.html',
             {
                 'root_url': self.site.root_url,
                 'model': easy_model,
                 'field_list': field_list
-            }, {}
+            }
         )
 
     def calendar_view(self, request, field, year=None, month=None, day=None):
