@@ -3,7 +3,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django_databrowse.datastructures import EasyModel
 from django_databrowse.sites import DatabrowsePlugin
 from django.shortcuts import render
-import urlparse
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    import urlparse
 
 
 class ObjectDetailPlugin(DatabrowsePlugin):
@@ -20,9 +24,9 @@ class ObjectDetailPlugin(DatabrowsePlugin):
         )
         try:
             obj = easy_model.object_by_pk(url)
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             raise http.Http404('Id not found')
-        except ValueError, e:
+        except ValueError:
             raise http.Http404('Invalid format key provided')
         return render(
             request,

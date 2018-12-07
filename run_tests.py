@@ -23,6 +23,11 @@ settings.configure(
     TEMPLATES=[{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ]
+        }
     }]
 )
 from django.test.runner import DiscoverRunner
