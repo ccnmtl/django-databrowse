@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='django-databrowse',
-    version='2018.11.19ccnmtl',
+    version='2018.12.10ccnmtl',
     packages=['django_databrowse', 'django_databrowse.plugins'],
     package_dir={'django_databrowse': 'django_databrowse'},
     package_data={
