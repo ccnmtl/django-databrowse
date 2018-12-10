@@ -6,7 +6,7 @@ convenience functionality and permalink functions for the databrowse app.
 from django.db import models
 from django.utils import formats
 from django.utils.text import capfirst
-from django.utils.encoding import smart_unicode, smart_str, iri_to_uri
+from django.utils.encoding import smart_text, smart_str, iri_to_uri
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
@@ -120,7 +120,7 @@ class EasyInstance(object):
                           self.instance._get_pk_val()))
 
     def __unicode__(self):
-        val = smart_unicode(self.instance)
+        val = smart_text(self.instance)
         if len(val) > DISPLAY_SIZE:
             return val[:DISPLAY_SIZE] + u'...'
         return val
@@ -258,7 +258,7 @@ class EasyInstanceField(object):
                                              m.model._meta.app_label,
                                              m.model._meta.model_name,
                                              iri_to_uri(value._get_pk_val())))
-                    lst.append((smart_unicode(value), url))
+                    lst.append((smart_text(value), url))
             else:
                 lst = [(value, None) for value in self.values()]
         elif self.field.choices:

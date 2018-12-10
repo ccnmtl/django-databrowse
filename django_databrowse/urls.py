@@ -1,15 +1,15 @@
-from django.conf.urls import patterns
+from django.conf.urls import url
 from django_databrowse import views
 
 # Note: The views in this URLconf all require a 'models' argument,
 # which is a list of model classes (*not* instances).
 
-urlpatterns = patterns('',
+urlpatterns = [
     #(r'^$', views.homepage),
     #(r'^([^/]+)/([^/]+)/$', views.model_detail),
 
-    (r'^([^/]+)/([^/]+)/fields/(\w+)/$', views.choice_list),
-    (r'^([^/]+)/([^/]+)/fields/(\w+)/(.*)/$', views.choice_detail),
+    url(r'^([^/]+)/([^/]+)/fields/(\w+)/$', views.choice_list),
+    url(r'^([^/]+)/([^/]+)/fields/(\w+)/(.*)/$', views.choice_detail),
 
     #(r'^([^/]+)/([^/]+)/calendars/(\w+)/$', views.calendar_main),
     #(r'^([^/]+)/([^/]+)/calendars/(\w+)/(\d{4})/$', views.calendar_year),
@@ -23,4 +23,4 @@ urlpatterns = patterns('',
     #),
 
     #(r'^([^/]+)/([^/]+)/objects/(.*)/$', views.object_detail),
-)
+]
