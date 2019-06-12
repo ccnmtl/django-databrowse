@@ -14,9 +14,15 @@ settings.configure(
     INSTALLED_APPS=(
         'django.contrib.auth',
         'django.contrib.contenttypes',
+        'django.contrib.messages',
         'django.contrib.sessions',
         'django.contrib.admin',
         'django_databrowse'
+    ),
+    MIDDLEWARE=(
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
     ),
     MIDDLEWARE_CLASSES=[],
     ROOT_URLCONF='test_urls',
@@ -26,6 +32,7 @@ settings.configure(
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ]
         }
     }]
