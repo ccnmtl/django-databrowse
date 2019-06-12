@@ -126,7 +126,7 @@ class EasyInstance(object):
         return val
 
     def __str__(self):
-        return self.__unicode__().encode('utf-8')
+        return self.__unicode__()
 
     def pk(self):
         return self.instance._get_pk_val()
