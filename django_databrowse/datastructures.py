@@ -6,7 +6,10 @@ convenience functionality and permalink functions for the databrowse app.
 from django.db import models
 from django.utils import formats
 from django.utils.text import capfirst
-from django.utils.encoding import smart_text, smart_str, iri_to_uri
+from django.utils.encoding import (
+    smart_text, smart_str, iri_to_uri,
+    python_2_unicode_compatible
+)
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
@@ -110,6 +113,7 @@ class EasyChoice(object):
                               iri_to_uri(self.value)))
 
 
+@python_2_unicode_compatible
 class EasyInstance(object):
     def __init__(self, easy_model, instance):
         self.model, self.instance = easy_model, instance
@@ -119,14 +123,11 @@ class EasyInstance(object):
                          (self.model.model._meta.object_name,
                           self.instance._get_pk_val()))
 
-    def __unicode__(self):
+    def __str__(self):
         val = smart_text(self.instance)
         if len(val) > DISPLAY_SIZE:
             return val[:DISPLAY_SIZE] + u'...'
         return val
-
-    def __str__(self):
-        return self.__unicode__().encode('utf-8')
 
     def pk(self):
         return self.instance._get_pk_val()
