@@ -118,3 +118,6 @@ class EasyInstanceTest(TestCase):
         ei = EasyInstance(EasyModel(django_databrowse.site,
                                     SomeModel), instance)
         self.assertEqual(ei.__repr__(), "<EasyInstance for SomeModel (1)>")
+
+        # TODO
+        self.assertEqual(str(ei), "<EasyInstance for SomeModel (1)>")
