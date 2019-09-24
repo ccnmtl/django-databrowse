@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='django-databrowse',
-    version='2018.12.10ccnmtl',
+    version='2019.9.24ctl',
     packages=['django_databrowse', 'django_databrowse.plugins'],
     package_dir={'django_databrowse': 'django_databrowse'},
     package_data={
@@ -36,6 +36,7 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development'
     ],
 )
