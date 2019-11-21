@@ -176,8 +176,14 @@ class EasyInstance(object):
             try:
                 rel_accessor = getattr(self.instance, rel_object.get_accessor_name())
             except ObjectDoesNotExist:
-                continue               
-            if rel_object.field.rel.multiple:
+                continue           
+
+            try:
+                multiple = rel_object.field.rel.multiple
+            except AttributeError:
+                multiple = rel_object.field.remote_field.multiple
+    
+            if multiple:
                 object_list = [EasyInstance(em, i) for i in rel_accessor.all()]
             else: # for one-to-one fields
                 object_list = [EasyInstance(em, rel_accessor)]
