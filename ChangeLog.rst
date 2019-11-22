@@ -1,8 +1,15 @@
+2019.11.22 2019.11.22
+====================
+----
+
+* Replace deprecated Field.rel with Field.remote_field
+
 2019.9.24 2019.9.24
 ====================
 ----
 
 * Fixed EasyInstance python 3 string representation.
+
 
 2018.12.10 2018.12.20
 ====================
