@@ -3,16 +3,18 @@ These classes are light wrappers around Django's database API that provide
 convenience functionality and permalink functions for the databrowse app.
 """
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import formats
-from django.utils.text import capfirst
 from django.utils.encoding import (
     smart_text, smart_str, iri_to_uri,
     python_2_unicode_compatible
 )
 from django.utils.safestring import mark_safe
-from django.db.models.query import QuerySet
-from django.core.exceptions import ObjectDoesNotExist
+from django.utils.text import capfirst
+from django_databrowse.utils import get_field_rel
+
 
 EMPTY_VALUE = '(None)'
 DISPLAY_SIZE = 100
@@ -88,7 +90,7 @@ class EasyField(object):
                                      self.model.model._meta.app_label,
                                      self.model.model._meta.model_name,
                                      self.field.name))
-        elif self.field.rel:
+        elif get_field_rel(self.field):
             return mark_safe('%s%s/%s/' %
                                 (self.model.site.root_url,
                                  self.model.model._meta.app_label,
@@ -176,14 +178,10 @@ class EasyInstance(object):
             try:
                 rel_accessor = getattr(self.instance, rel_object.get_accessor_name())
             except ObjectDoesNotExist:
-                continue           
+                continue
 
-            try:
-                multiple = rel_object.field.rel.multiple
-            except AttributeError:
-                multiple = rel_object.field.remote_field.multiple
-    
-            if multiple:
+            rel = get_field_rel(rel_object.field)
+            if rel.multiple:
                 object_list = [EasyInstance(em, i) for i in rel_accessor.all()]
             else: # for one-to-one fields
                 object_list = [EasyInstance(em, rel_accessor)]
@@ -212,10 +210,11 @@ class EasyInstanceField(object):
         # This import is deliberately inside the function because it causes
         # some settings to be imported, and we don't want to do that at the
         # module level.
-        if self.field.rel:
-            if isinstance(self.field.rel, models.ManyToOneRel):
+        rel = get_field_rel(self.field)
+        if rel:
+            if isinstance(rel, models.ManyToOneRel):
                 objs = getattr(self.instance.instance, self.field.name)
-            elif isinstance(self.field.rel,
+            elif isinstance(rel,
                             models.ManyToManyRel): # ManyToManyRel
                 return list(getattr(self.instance.instance,
                                     self.field.name).all())
@@ -253,9 +252,10 @@ class EasyInstanceField(object):
                 #plugin_urls.append(urls)
                 values = self.values()
                 return zip(self.values(), urls)
-        if self.field.rel:
-            m = EasyModel(self.model.site, self.field.rel.to)
-            if self.field.rel.to in self.model.model_list:
+        rel = get_field_rel(self.field)
+        if rel:
+            m = EasyModel(self.model.site, rel.to)
+            if rel.to in self.model.model_list:
                 lst = []
                 for value in self.values():
                     if value is None:

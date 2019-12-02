@@ -1,13 +1,17 @@
+import urllib
+
 from django import http
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
-from django_databrowse.datastructures import EasyModel
-from django_databrowse.sites import DatabrowsePlugin
 from django.shortcuts import render
-from django.utils.text import capfirst
 from django.utils.encoding import smart_str, force_text
 from django.utils.safestring import mark_safe
-import urllib
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.text import capfirst
+
+from django_databrowse.datastructures import EasyModel
+from django_databrowse.sites import DatabrowsePlugin
+from django_databrowse.utils import get_field_rel
+
 
 class FieldChoicePlugin(DatabrowsePlugin):
     def __init__(self, field_filter=None):
@@ -31,7 +35,7 @@ class FieldChoicePlugin(DatabrowsePlugin):
         else:
             return dict(
                 [(f.name, f) for f in model._meta.fields
-                 if not f.rel and
+                 if not get_field_rel(f) and
                     not f.primary_key and
                     not f.unique and
                     not isinstance(f, (models.AutoField, models.TextField))]
