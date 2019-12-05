@@ -1,3 +1,8 @@
+2019.12.04 2019.12.04
+====================
+----
+* Replace more instances of deprecated Field.rel with Field.remote_field
+
 2019.11.22 2019.11.22
 ====================
 ----
