@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='django-databrowse',
-    version='2019.11.22ctl',
+    version='2019.12.04ctl'
     packages=['django_databrowse', 'django_databrowse.plugins'],
     package_dir={'django_databrowse': 'django_databrowse'},
     package_data={
