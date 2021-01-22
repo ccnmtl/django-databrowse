@@ -5,9 +5,9 @@ from django_databrowse.sites import DatabrowsePlugin
 from django.shortcuts import render
 
 try:
-    from urllib.parse import urlparse
+    from urllib.parse import urljoin
 except ImportError:
-    import urlparse
+    from urlparse import urljoin
 
 
 class ObjectDetailPlugin(DatabrowsePlugin):
@@ -16,7 +16,7 @@ class ObjectDetailPlugin(DatabrowsePlugin):
         # Which is one level up.
         if url is None:
             return http.HttpResponseRedirect(
-                urlparse.urljoin(request.path, '../')
+                urljoin(request.path, '../')
             )
         easy_model = EasyModel(
             model_databrowse.site,
