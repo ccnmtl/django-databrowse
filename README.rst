@@ -1,9 +1,8 @@
+[![Actions Status](https://github.com/ccnmtl/django-databrowse/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/django-databrowse/actions)
+
 =================
 Django Databrowse
 =================
-
-.. image:: https://travis-ci.org/ccnmtl/django-databrowse.svg?branch=master
-    :target: https://travis-ci.org/ccnmtl/django-databrowse
 
 .. contents:: Table of contents
 
