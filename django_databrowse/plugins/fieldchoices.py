@@ -46,7 +46,7 @@ class FieldChoicePlugin(DatabrowsePlugin):
         if not fields:
             return u''
         return mark_safe(
-            u'<p class="filter"><strong>View by:</strong> %s</p>' % \
+            u'<p class="filter"><strong>View by:</strong> %s</p>' %
             u', '.join(
                 ['<a href="fields/%s/">%s</a>' %
                  (f.name, force_text(capfirst(f.verbose_name)))
@@ -55,7 +55,7 @@ class FieldChoicePlugin(DatabrowsePlugin):
 
     def urls(self, plugin_name, easy_instance_field):
         if easy_instance_field.field \
-        in self.field_dict(easy_instance_field.model.model).values():
+                in self.field_dict(easy_instance_field.model.model).values():
             field_value = smart_str(easy_instance_field.raw_value)
             return [mark_safe(u'%s%s/%s/%s/' % (
                 easy_instance_field.model.url(),
@@ -103,19 +103,20 @@ class FieldChoicePlugin(DatabrowsePlugin):
         if value is not None:
             obj_list = easy_model.objects(**{field.name: value})
         else:
-            obj_list = [v[field.name] for v in \
-            self.model._default_manager.distinct().order_by(field.name).\
-            values(field.name)]
+            obj_list = \
+                [v[field.name] for v in
+                 self.model._default_manager.distinct().order_by(field.name).
+                 values(field.name)]
 
         # add paging
         numitems = request.GET.get('items')
-        items_per_page = [25,50,100]
-        if numitems and numitems.isdigit() and int(numitems)>0:
+        items_per_page = [25, 50, 100]
+        if numitems and numitems.isdigit() and int(numitems) > 0:
             paginator = Paginator(obj_list, numitems)
         else:
             # fall back to default
             paginator = Paginator(obj_list, items_per_page[0])
-        
+
         page = request.GET.get('page')
         try:
             obj_list_page = paginator.page(page)
@@ -125,7 +126,7 @@ class FieldChoicePlugin(DatabrowsePlugin):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page.
             obj_list_page = paginator.page(paginator.num_pages)
-        
+
         if value is not None:
             return render(
                 request,

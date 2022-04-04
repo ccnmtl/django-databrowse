@@ -77,9 +77,7 @@ class EasyFieldTest(TestCase):
         field = EasyField(
             em,
             models.CharField(max_length=2,
-                             choices=(("a", "azerty"),("q","querty"))
-                             )
-            )
+                             choices=(("a", "azerty"), ("q", "querty"))))
         self.assertEqual(len([f for f in field.choices()]), 2)
 
     def test_urls(self):
@@ -88,7 +86,7 @@ class EasyFieldTest(TestCase):
         field = EasyField(
             em,
             models.CharField(max_length=2,
-                             choices=(("a", "azerty"),("q","querty")),
+                             choices=(("a", "azerty"), ("q", "querty")),
                              name="hello"
                              )
             )

@@ -11,6 +11,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django_databrowse.datastructures import EasyModel
 
+from django_databrowse.plugins.calendars import CalendarPlugin
+from django_databrowse.plugins.objects import ObjectDetailPlugin
+from django_databrowse.plugins.fieldchoices import FieldChoicePlugin
+
 
 class AlreadyRegistered(Exception):
     pass
@@ -191,11 +195,8 @@ class DatabrowseSite(object):
                                "with databrowse.")
         return databrowse_class(model, self).root(request, rest_of_url)
 
-site = DatabrowseSite()
 
-from django_databrowse.plugins.calendars import CalendarPlugin
-from django_databrowse.plugins.objects import ObjectDetailPlugin
-from django_databrowse.plugins.fieldchoices import FieldChoicePlugin
+site = DatabrowseSite()
 
 
 class DefaultModelDatabrowse(ModelDatabrowse):

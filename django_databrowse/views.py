@@ -1,11 +1,11 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 ###########
 # CHOICES #
 ###########
-
 def choice_list(request, app_label, model_name, field_name, models):
     m, f = lookup_field(app_label, model_name, field_name, models)
     return render(
@@ -13,6 +13,7 @@ def choice_list(request, app_label, model_name, field_name, models):
         'databrowse/choice_list.html',
         {'model': m, 'field': f}
     )
+
 
 def choice_detail(request, app_label, model_name, field_name,
                   field_val, models):
@@ -23,13 +24,13 @@ def choice_detail(request, app_label, model_name, field_name,
         raise Http404('Invalid choice value given')
     obj_list = m.objects(**{f.field.name: field_val})
     numitems = request.GET.get('items')
-    items_per_page = [25,50,100]
-    if numitems and numitems.isdigit() and int(numitems)>0:
+    items_per_page = [25, 50, 100]
+    if numitems and numitems.isdigit() and int(numitems) > 0:
         paginator = Paginator(obj_list, numitems)
     else:
         # fall back to default
         paginator = Paginator(obj_list, items_per_page[0])
-    
+
     page = request.GET.get('page')
     try:
         obj_list_page = paginator.page(page)
