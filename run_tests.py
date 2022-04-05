@@ -11,6 +11,7 @@ settings.configure(
             'ENGINE': 'django.db.backends.sqlite3',
         }
     },
+    DEFAULT_AUTO_FIELD='django.db.models.AutoField',
     INSTALLED_APPS=(
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -25,6 +26,7 @@ settings.configure(
         'django.contrib.messages.middleware.MessageMiddleware',
     ),
     ROOT_URLCONF='test_urls',
+    SECRET_KEY='something super secret',
     TEMPLATES=[{
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
@@ -32,6 +34,7 @@ settings.configure(
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request'
             ]
         }
     }]

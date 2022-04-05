@@ -29,12 +29,12 @@ $(PY_SENTINAL):
 	touch $@
 
 test: $(REQUIREMENTS) $(PY_SENTINAL)
-	./ve/bin/python runtests.py
+	./ve/bin/python run_tests.py
 
 flake8: $(PY_SENTINAL)
 	$(FLAKE8) $(PY_DIRS) --max-complexity=$(MAX_COMPLEXITY)
 
 coverage: $(PY_SENTINAL)
-	$(COVERAGE) run --source=django_databrowse runtests.py
+	$(COVERAGE) run --source=django_databrowse run_tests.py
 
 .PHONY: flake8 test coverage clean

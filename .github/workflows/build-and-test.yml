@@ -2,22 +2,12 @@ name: build-and-test
 on: [push, workflow_dispatch]
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-          python-version: [3.6]
-          django-version: [2.2]
+          python-version: [3.8]
     steps:
       - uses: actions/checkout@v2
+      - name: Build with Makefile
+        run: make
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-          
-      - name: Install Django
-        run: |
-          python -m pip install "Django~=${{ matrix.django-version }}"
-
-      - name: Run Tests
-        run: python run_tests.py

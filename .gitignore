@@ -18,3 +18,4 @@ django_databrowse_project/
 .project
 .pydevproject
 ve
+.coverage
