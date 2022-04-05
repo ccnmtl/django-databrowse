@@ -9,7 +9,6 @@ from django.db.models.query import QuerySet
 from django.utils import formats
 from django.utils.encoding import (
     smart_text, smart_str, iri_to_uri,
-    python_2_unicode_compatible
 )
 from django.utils.safestring import mark_safe
 from django.utils.text import capfirst
@@ -115,7 +114,6 @@ class EasyChoice(object):
                               iri_to_uri(self.value)))
 
 
-@python_2_unicode_compatible
 class EasyInstance(object):
     def __init__(self, easy_model, instance):
         self.model, self.instance = easy_model, instance
