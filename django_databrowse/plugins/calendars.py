@@ -60,17 +60,17 @@ class CalendarPlugin(DatabrowsePlugin):
             return dict([(f.name, f)
                          for f in model._meta.fields
                          if isinstance(f, models.DateField) and
-                            (f.name in self.field_names)])
+                         (f.name in self.field_names)])
 
     def model_index_html(self, request, model, site):
         fields = self.field_dict(model)
         if not fields:
             return u''
         return mark_safe(
-            u'<p class="filter"><strong>View calendar by:</strong> %s</p>' % \
+            u'<p class="filter"><strong>View calendar by:</strong> %s</p>' %
             u', '.join(
                     ['<a href="calendars/%s/">%s</a>' %
-                     (f.name,force_text(capfirst(f.verbose_name)))
+                     (f.name, force_text(capfirst(f.verbose_name)))
                      for f in fields.values()])
                 )
 
@@ -107,7 +107,7 @@ class CalendarPlugin(DatabrowsePlugin):
     def homepage_view(self, request):
         easy_model = EasyModel(self.site, self.model)
         field_list = self.fields.values()
-        field_list.sort(key=lambda k:k.verbose_name)
+        field_list.sort(key=lambda k: k.verbose_name)
         return render(
             request,
             'databrowse/calendar_homepage.html',

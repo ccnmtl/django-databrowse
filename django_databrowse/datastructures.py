@@ -3,7 +3,7 @@ These classes are light wrappers around Django's database API that provide
 convenience functionality and permalink functions for the databrowse app.
 """
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import formats
@@ -46,7 +46,7 @@ class EasyModel(object):
     def get_query_set(self):
         qs = self.model._default_manager.get_queryset()
         easy_qs = EasyQuerySet(model=qs.model, query=qs.query.clone(),
-                                           using=qs._db, hints=qs._hints)
+                               using=qs._db, hints=qs._hints)
         easy_qs._easymodel = self
         return easy_qs
 
@@ -60,7 +60,7 @@ class EasyModel(object):
     def field(self, name):
         try:
             f = self.model._meta.get_field(name)
-        except models.FieldDoesNotExist:
+        except FieldDoesNotExist:
             return None
         return EasyField(self, f)
 
@@ -75,8 +75,8 @@ class EasyField(object):
 
     def __repr__(self):
         return smart_str(u'<EasyField for %s.%s>' %
-                                        (self.model.model._meta.object_name,
-                                         self.field.name))
+                         (self.model.model._meta.object_name,
+                          self.field.name))
 
     def choices(self):
         for value, label in self.field.choices:
@@ -85,15 +85,16 @@ class EasyField(object):
     def url(self):
         if self.field.choices:
             return mark_safe('%s%s/%s/%s/' %
-                                    (self.model.site.root_url,
-                                     self.model.model._meta.app_label,
-                                     self.model.model._meta.model_name,
-                                     self.field.name))
+                             (self.model.site.root_url,
+                              self.model.model._meta.app_label,
+                              self.model.model._meta.model_name,
+                              self.field.name))
         elif get_field_rel(self.field):
             return mark_safe('%s%s/%s/' %
-                                (self.model.site.root_url,
-                                 self.model.model._meta.app_label,
-                                 self.model.model._meta.model_name))
+                             (self.model.site.root_url,
+                              self.model.model._meta.app_label,
+                              self.model.model._meta.model_name))
+
 
 class EasyChoice(object):
     def __init__(self, easy_model, field, value, label):
@@ -102,16 +103,16 @@ class EasyChoice(object):
 
     def __repr__(self):
         return smart_str(u'<EasyChoice for %s.%s>' %
-                                    (self.model.model._meta.object_name,
-                                     self.field.name))
+                         (self.model.model._meta.object_name,
+                          self.field.name))
 
     def url(self):
         return mark_safe('%s%s/%s/%s/%s/' %
-                             (self.model.site.root_url,
-                              self.model.model._meta.app_label,
-                              self.model.model._meta.model_name,
-                              self.field.field.name,
-                              iri_to_uri(self.value)))
+                         (self.model.site.root_url,
+                          self.model.model._meta.app_label,
+                          self.model.model._meta.model_name,
+                          self.field.field.name,
+                          iri_to_uri(self.value)))
 
 
 class EasyInstance(object):
@@ -145,7 +146,7 @@ class EasyInstance(object):
         EasyInstance's model.
         """
         for f in self.model.model._meta.fields +\
-                 self.model.model._meta.many_to_many:
+                self.model.model._meta.many_to_many:
             yield EasyInstanceField(self.model, self, f)
 
     def get_all_related_objects(self):
@@ -169,19 +170,20 @@ class EasyInstance(object):
         """
         for rel_object in \
             self.get_all_related_objects() +\
-            self.get_all_related_many_to_many_objects():
+                self.get_all_related_many_to_many_objects():
             if rel_object.model not in self.model.model_list:
-                continue # Skip models that aren't in the model_list
+                continue  # Skip models that aren't in the model_list
             em = EasyModel(self.model.site, rel_object.model)
             try:
-                rel_accessor = getattr(self.instance, rel_object.get_accessor_name())
+                rel_accessor = getattr(self.instance,
+                                       rel_object.get_accessor_name())
             except ObjectDoesNotExist:
                 continue
 
             rel = get_field_rel(rel_object.field)
             if rel.multiple:
                 object_list = [EasyInstance(em, i) for i in rel_accessor.all()]
-            else: # for one-to-one fields
+            else:  # for one-to-one fields
                 object_list = [EasyInstance(em, rel_accessor)]
             yield {
                 'model': em,
@@ -213,13 +215,13 @@ class EasyInstanceField(object):
             if isinstance(rel, models.ManyToOneRel):
                 objs = getattr(self.instance.instance, self.field.name)
             elif isinstance(rel,
-                            models.ManyToManyRel): # ManyToManyRel
+                            models.ManyToManyRel):  # ManyToManyRel
                 return list(getattr(self.instance.instance,
                                     self.field.name).all())
         elif self.field.choices:
             objs = dict(self.field.choices).get(self.raw_value, EMPTY_VALUE)
         elif isinstance(self.field, models.DateField) or \
-                                    isinstance(self.field, models.TimeField):
+                isinstance(self.field, models.TimeField):
             if self.raw_value:
                 if isinstance(self.field, models.DateTimeField):
                     objs = capfirst(formats.date_format(self.raw_value,
@@ -233,7 +235,7 @@ class EasyInstanceField(object):
             else:
                 objs = EMPTY_VALUE
         elif isinstance(self.field, models.BooleanField) or \
-                            isinstance(self.field, models.NullBooleanField):
+                isinstance(self.field, models.NullBooleanField):
             objs = {True: 'Yes', False: 'No', None: 'Unknown'}[self.raw_value]
         else:
             objs = self.raw_value
@@ -242,13 +244,10 @@ class EasyInstanceField(object):
     def urls(self):
         "Returns a list of (value, URL) tuples."
         # First, check the urls() method for each plugin.
-        plugin_urls = []
         for plugin_name, plugin in \
-                                self.model.model_databrowse().plugins.items():
+                self.model.model_databrowse().plugins.items():
             urls = plugin.urls(plugin_name, self)
             if urls is not None:
-                #plugin_urls.append(urls)
-                values = self.values()
                 return zip(self.values(), urls)
         rel = get_field_rel(self.field)
         if rel:
@@ -259,10 +258,10 @@ class EasyInstanceField(object):
                     if value is None:
                         continue
                     url = mark_safe('%s%s/%s/objects/%s/' %
-                                            (self.model.site.root_url,
-                                             m.model._meta.app_label,
-                                             m.model._meta.model_name,
-                                             iri_to_uri(value._get_pk_val())))
+                                    (self.model.site.root_url,
+                                     m.model._meta.app_label,
+                                     m.model._meta.model_name,
+                                     iri_to_uri(value._get_pk_val())))
                     lst.append((smart_text(value), url))
             else:
                 lst = [(value, None) for value in self.values()]
@@ -270,11 +269,11 @@ class EasyInstanceField(object):
             lst = []
             for value in self.values():
                 url = mark_safe('%s%s/%s/fields/%s/%s/' %
-                                        (self.model.site.root_url,
-                                         self.model.model._meta.app_label,
-                                         self.model.model._meta.model_name,
-                                         self.field.name,
-                                         iri_to_uri(self.raw_value)))
+                                (self.model.site.root_url,
+                                 self.model.model._meta.app_label,
+                                 self.model.model._meta.model_name,
+                                 self.field.name,
+                                 iri_to_uri(self.raw_value)))
                 lst.append((value, url))
         elif isinstance(self.field, models.URLField):
             val = self.values()[0]
