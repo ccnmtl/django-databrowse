@@ -54,9 +54,9 @@ class EasyModelTest(TestCase):
                                     SomeModel), child)
         ei_child = EasyInstance(EasyModel(django_databrowse.site,
                                           SomeInheritedModel), child)
-        self.assertEqual(
-            ei.related_objects().next()['object_list'][0].instance,
-            ei_child.instance)
+        nxt = next(ei.related_objects())
+        instance = nxt['object_list'][0].instance
+        self.assertEqual(instance, ei_child.instance)
 
     def test_model_inheritance_no_child(self):
         instance = SomeModel.objects.create(some_field='hello')
@@ -94,7 +94,8 @@ class EasyFieldTest(TestCase):
                          u'root/django_databrowse/somemodel/hello/')
 
         em = EasyModel(django_databrowse.site, SomeInheritedModel)
-        field = EasyField(em, models.ForeignKey(SomeModel))
+        field = EasyField(em, models.ForeignKey(SomeModel,
+                                                on_delete=models.CASCADE))
         self.assertEqual(field.url(),
                          u'root/django_databrowse/someinheritedmodel/')
 
@@ -117,5 +118,4 @@ class EasyInstanceTest(TestCase):
                                     SomeModel), instance)
         self.assertEqual(ei.__repr__(), "<EasyInstance for SomeModel (1)>")
 
-        # TODO
-        self.assertEqual(str(ei), "<EasyInstance for SomeModel (1)>")
+        self.assertEqual(str(ei), "SomeModel object (1)")

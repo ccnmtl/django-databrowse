@@ -3,7 +3,7 @@ These classes are light wrappers around Django's database API that provide
 convenience functionality and permalink functions for the databrowse app.
 """
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import formats
@@ -60,7 +60,7 @@ class EasyModel(object):
     def field(self, name):
         try:
             f = self.model._meta.get_field(name)
-        except models.FieldDoesNotExist:
+        except FieldDoesNotExist:
             return None
         return EasyField(self, f)
 
