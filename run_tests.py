@@ -43,7 +43,7 @@ from django.test.runner import DiscoverRunner
 
 django.setup()
 
-test_runner = DiscoverRunner(verbosity=2)
+test_runner = DiscoverRunner(verbosity=1)
 
 failures = test_runner.run_tests(['django_databrowse', ])
 
