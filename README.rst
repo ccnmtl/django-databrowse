@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/ccnmtl/django-databrowse/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/django-databrowse/actions)
+[Actions Status](https://github.com/ccnmtl/django-databrowse/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/django-databrowse/actions)
 
 =================
 Django Databrowse
