@@ -4,7 +4,7 @@ from django import http
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
 from django.shortcuts import render
-from django.utils.encoding import smart_str, force_text
+from django.utils.encoding import smart_str, force_bytes
 from django.utils.safestring import mark_safe
 from django.utils.text import capfirst
 
@@ -49,7 +49,7 @@ class FieldChoicePlugin(DatabrowsePlugin):
             u'<p class="filter"><strong>View by:</strong> %s</p>' %
             u', '.join(
                 ['<a href="fields/%s/">%s</a>' %
-                 (f.name, force_text(capfirst(f.verbose_name)))
+                 (f.name, force_bytes(capfirst(f.verbose_name)))
                     for f in fields.values()])
         )
 

@@ -147,7 +147,7 @@ class DatabrowseSite(object):
                                     model.__name__)
             del self.registry[model]
 
-    def root(self, request, url):
+    def root(self, request, url=''):
         """
         Handles main URL routing for the databrowse app.
 

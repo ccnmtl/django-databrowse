@@ -7,9 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import formats
-from django.utils.encoding import (
-    smart_text, smart_str, iri_to_uri,
-)
+from django.utils.encoding import smart_str, iri_to_uri
 from django.utils.safestring import mark_safe
 from django.utils.text import capfirst
 from django_databrowse.utils import get_field_rel
@@ -125,7 +123,7 @@ class EasyInstance(object):
                           self.instance._get_pk_val()))
 
     def __str__(self):
-        val = smart_text(self.instance)
+        val = smart_str(self.instance)
         if len(val) > DISPLAY_SIZE:
             return val[:DISPLAY_SIZE] + u'...'
         return val
@@ -262,7 +260,7 @@ class EasyInstanceField(object):
                                      m.model._meta.app_label,
                                      m.model._meta.model_name,
                                      iri_to_uri(value._get_pk_val())))
-                    lst.append((smart_text(value), url))
+                    lst.append((smart_str(value), url))
             else:
                 lst = [(value, None) for value in self.values()]
         elif self.field.choices:

@@ -53,22 +53,21 @@ class DatabrowseTestsClient(TestCase):
 
     def test_urls(self):
         django_databrowse.site.register(SomeModel)
-        response = Client().get('')
+        c = Client()
+        response = c.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(
             response.context['model_list'][0],
             EasyModel)
 
-        response = Client().get('/django_databrowse/somemodel/')
+        response = c.get('/django_databrowse/somemodel/')
         self.assertEqual(response.status_code, 200)
 
-        response = Client().get('/django_databrowse/doesnotexistmodel/')
+        response = c.get('/django_databrowse/doesnotexistmodel/')
         self.assertEqual(response.status_code, 404)
-        response = Client().get('/django_databrowse/something/somemodel/')
+        response = c.get('/django_databrowse/something/somemodel/')
         self.assertEqual(response.status_code, 404)
-        response = Client().get(
-            '/django_databrowse/somemodel/fields/some_field/')
+        response = c.get('/django_databrowse/somemodel/fields/some_field/')
         self.assertEqual(response.status_code, 200)
-        response = Client().get(
-            '/django_databrowse/someothermodel/')
+        response = c.get('/django_databrowse/someothermodel/')
         self.assertEqual(response.status_code, 404)
