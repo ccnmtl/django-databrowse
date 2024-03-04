@@ -4,7 +4,7 @@ from django_databrowse.datastructures import EasyModel
 from django_databrowse.sites import DatabrowsePlugin
 from django.shortcuts import render
 from django.utils.text import capfirst
-from django.utils.encoding import force_text
+from django.utils.encoding import force_bytes
 from django.utils.safestring import mark_safe
 from django.views.generic import dates
 from django.utils import datetime_safe
@@ -70,7 +70,7 @@ class CalendarPlugin(DatabrowsePlugin):
             u'<p class="filter"><strong>View calendar by:</strong> %s</p>' %
             u', '.join(
                     ['<a href="calendars/%s/">%s</a>' %
-                     (f.name, force_text(capfirst(f.verbose_name)))
+                     (f.name, force_bytes(capfirst(f.verbose_name)))
                      for f in fields.values()])
                 )
 

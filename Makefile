@@ -2,10 +2,10 @@ PY_DIRS=django_databrowse
 VE ?= ./ve
 SYS_PYTHON ?= python3
 PY_SENTINAL ?= $(VE)/sentinal
-PIP_VERSION ?= 21.0.1
+PIP_VERSION ?= 24.0
 MAX_COMPLEXITY ?= 12
 PY_DIRS ?= $(APP)
-DJANGO ?= "Django==3.2.12"
+DJANGO ?= "Django==4.2.10"
 
 FLAKE8 ?= $(VE)/bin/flake8
 PIP ?= $(VE)/bin/pip
