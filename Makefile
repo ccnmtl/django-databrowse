@@ -5,7 +5,7 @@ PY_SENTINAL ?= $(VE)/sentinal
 PIP_VERSION ?= 25.3
 MAX_COMPLEXITY ?= 12
 PY_DIRS ?= $(APP)
-DJANGO ?= "Django==4.2.10"
+DJANGO ?= "Django==5.2.9"
 
 FLAKE8 ?= $(VE)/bin/flake8
 PIP ?= $(VE)/bin/pip
