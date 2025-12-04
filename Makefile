@@ -2,7 +2,7 @@ PY_DIRS=django_databrowse
 VE ?= ./ve
 SYS_PYTHON ?= python3
 PY_SENTINAL ?= $(VE)/sentinal
-PIP_VERSION ?= 24.0
+PIP_VERSION ?= 25.3
 MAX_COMPLEXITY ?= 12
 PY_DIRS ?= $(APP)
 DJANGO ?= "Django==4.2.10"
