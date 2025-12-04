@@ -7,7 +7,6 @@ from django.utils.text import capfirst
 from django.utils.encoding import force_bytes
 from django.utils.safestring import mark_safe
 from django.views.generic import dates
-from django.utils import datetime_safe
 
 
 class DateViewMixin(object):
@@ -77,11 +76,12 @@ class CalendarPlugin(DatabrowsePlugin):
     def urls(self, plugin_name, easy_instance_field):
         if isinstance(easy_instance_field.field, models.DateField):
             d = easy_instance_field.raw_value
+            month_str = d.strftime('%b').lower()
             return [mark_safe(u'%s%s/%s/%s/%s/%s/' % (
                 easy_instance_field.model.url(),
                 plugin_name, easy_instance_field.field.name,
                 str(d.year),
-                datetime_safe.new_date(d).strftime('%b').lower(),
+                month_str,
                 d.day))]
 
     def model_view(self, request, model_databrowse, url):
